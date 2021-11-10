@@ -16,5 +16,8 @@ This project consist of 3 microservices.
 2) Cards: This service will provide users to apply for cards, activate/deactivate their cards and get all card details.  
 3) Loans: This service will provide users to apply for loans, get loan details and paid loan amount.  
 
+### Architecture Diagram
+<img src"images/Architecture Diagram.png">
+
 ### Technolgies used
 1. 
