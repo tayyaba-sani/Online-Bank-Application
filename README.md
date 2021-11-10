@@ -17,7 +17,7 @@ This project consist of 3 microservices.
 3) Loans: This service will provide users to apply for loans, get loan details and paid loan amount.  
 
 ### Architecture Diagram
-<img src"images/Architecture Diagram.png">
+<img src="images/Architecture Diagram.png" >
 
 ### Technolgies used
 1. 
