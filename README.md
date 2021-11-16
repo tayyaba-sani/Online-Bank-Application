@@ -15,6 +15,7 @@ This project consist of 3 microservices.
  and check bank balance.  
 2) Cards: This service will provide users to apply for cards, activate/deactivate their cards and get all card details.  
 3) Loans: This service will provide users to apply for loans, get loan details and paid loan amount.  
+4) Notification: This service will consumes all the messages from RabbitMQ and pushes necessary email notifications to the end users.
 
 ### Architecture Diagram
 <img src="images/Architecture Diagram.png" >
