@@ -8,6 +8,7 @@ This Application provides users to access following features.
 - Facility to check cards details.  
 - Apply for loan.  
 - Keep a check on loans details.  
+- Receive email notification.  
 
 ### Microservices
 This project consist of 3 microservices.  
