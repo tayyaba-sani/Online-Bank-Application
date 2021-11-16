@@ -28,7 +28,18 @@ This project consist of 3 microservices.
 <img src="images/Project Architecture Diagram.png" >
 
 ### Technolgies used
-
+1) Java 11  
+2) Spring Boot 2.5.5  
+3) Netflix Eureka Service Registry  
+4) Netflix Eureka Service Client  
+5) Spring Cloud API Gateway  
+6) Spring Cloud Config Server  
+7) Zipkin  
+8) Spring Cloud Sleuth  
+9) Open Feign  
+10) RabbitMQ  
+11) Prometheus  
+12) PostgreSQL  
 
 ### Maven Project  
 After cloning the project you can import it to your IDE, then run the "mvn clean install" command  
