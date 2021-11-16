@@ -18,7 +18,7 @@ This project consist of 3 microservices.
 4) Notification: This service will consumes all the messages from RabbitMQ and pushes necessary email notifications to the end users.
 
 ### Architecture Diagram
-<img src="images/Architecture Diagram.png" >
+<img src="images/Project Architecture Diagram.png" >
 
 ### Technolgies used
 1. 
