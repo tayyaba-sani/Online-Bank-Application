@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Notification</title>
+</head>
+<body>
+<div> Dear Mr./Mrs./Ms. <b th:text="${accounts.customer.name}"></b>,<br>
+    <br>Below is the transactional detail of your  Account <a th:text = "${accounts.accountNumber}"></a>  in
+    <a th:text = "${accounts.branchAddress}"></a>
+</div>
+<table cellspacing='0' cellpadding='0' border='1' class='yiv5171136798MsoNormalTable'>
+    <tbody>
+    <tr>
+        <td width='10%' bgcolor='#0074BD'>
+            <div align='left'><span style="color: #ffffff; "><strong>&nbsp;&nbsp;Date</strong></span></div>
+        </td>
+        <td width='10%' bgcolor='#0074BD'>
+            <div align='left'><span style="color: #ffffff; "><strong>&nbsp;&nbsp;Transaction Type</strong></span></div>
+        </td>
+        <td width='10%' bgcolor='#0074BD'>
+            <div align='right'><span style="color: #ffffff; "><strong>&nbsp;&nbsp;Amount</strong></span></div>
+        </td>
+    </tr>
+    <tr>
+        <td width='10%' bgcolor='#ffffff'>
+            <div align='left'><span style="color: #000000; ">
+                <a th:text = "${accounts.createDatetime}" ></a></span></div>
+        </td>
+        <td width='10%' bgcolor='#ffffff'>
+            <div align='left'><span style="color: #000000; "> <a th:text ="${accounts.operations.get(accounts.operations.size() -1).typeOperation}"></a> </span></div>
+        </td>
+        <td width='10%' bgcolor='#ffffff'>
+            <div align='right'><span style="color: #000000; "><a th:text = "${accounts.operations.get(accounts.operations.size() -1).amount}"></a> </span></div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<br>Best Regards,<br>
+<br>Bank Employee <br>
+</body>
+</html>
