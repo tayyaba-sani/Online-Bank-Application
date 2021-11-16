@@ -10,6 +10,13 @@ This Application provides users to access following features.
 - Keep a check on loans details.  
 - Receive email notification.  
 
+Full list of available REST endpoints could be found in Swagger UI,
+which could be called using following links:
+**http://localhost:8080/swagger-ui/#/**
+**http://localhost:9000/swagger-ui/#/**  
+**http://localhost:8090/swagger-ui/#/**
+
+
 ### Microservices
 This project consist of 3 microservices.  
 1) Accounts: This service will provide users to create/ delete accounts, debit/credit from their accounts, get account details also along with cards and loan details
