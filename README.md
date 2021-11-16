@@ -22,4 +22,8 @@ This project consist of 3 microservices.
 <img src="images/Project Architecture Diagram.png" >
 
 ### Technolgies used
-1. 
+
+
+### Maven Project  
+After cloning the project you can import it to your IDE, then run the "mvn clean install" command  
+
