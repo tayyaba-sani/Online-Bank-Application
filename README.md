@@ -40,6 +40,9 @@ This project consist of 4 microservices.
 10) RabbitMQ  
 11) Prometheus  
 12) PostgreSQL  
+13) ELK Stack  
+14) Docker  
+15) Swagger  
 
 ### Maven Project  
 After cloning the project you can import it to your IDE, then run the "mvn clean install" command  
