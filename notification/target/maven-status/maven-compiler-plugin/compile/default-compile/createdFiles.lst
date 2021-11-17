@@ -1,0 +1,11 @@
+com\notification\Notification\dto\Accounts.class
+com\notification\Notification\config\RabbitMQConfig.class
+com\notification\Notification\dto\AccountStatus.class
+com\notification\Notification\dto\OperationType.class
+com\notification\Notification\dto\Operations.class
+com\notification\Notification\dto\BaseEntity.class
+com\notification\Notification\NotificationApplication.class
+com\notification\Notification\service\JavaMailSenderService.class
+com\notification\Notification\config\NotificationServiceConfig.class
+com\notification\Notification\dto\AccountType.class
+com\notification\Notification\dto\Customer.class
