@@ -39,10 +39,11 @@ This project consist of 4 microservices.
 9) Open Feign  
 10) RabbitMQ  
 11) Prometheus  
-12) PostgreSQL  
-13) ELK Stack  
-14) Docker  
-15) Swagger  
+12) Resilience4j
+13) PostgreSQL  
+14) ELK Stack  
+15) Docker  
+16) Swagger  
 
 ### Maven Project  
 After cloning the project you can import it to your IDE, then run the "mvn clean install" command  
