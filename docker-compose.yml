@@ -1,0 +1,212 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+version: '3.8'
+
+#Define services
+services:
+
+  #PostgreSQL Database for the application
+  postgresDb:
+    image: "postgres:9.6-alpine"
+    container_name: postgresDb
+    #Volume mounted for database for the storage
+    volumes:
+      - dbApp-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Forward the exposed port 5432 on the container to port 5432 on the host machine
+    #Environment variable for DB name, user and password
+    environment:
+      - POSTGRES_DB=BankApplication
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=shaziariaz
+    networks:
+      - bank
+  
+  #Back-end Spring Boot Application
+      
+  rabbitmq3:    
+    image: rabbitmq:3.8-management-alpine
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"   #AMQP protocol port
+      - "15672:15672" #HTTP management UI
+    networks:
+      - bank
+      
+  zipkin:
+    image: openzipkin/zipkin
+    mem_limit: 700m
+    ports:
+      - "9411:9411"
+    networks:
+     - bank
+     
+  configserver:
+    #The docker file in bankapplication-configserver build the jar and provides the docker image with the following name.
+    build: ./configserver
+    image: bankapplication-configserver
+    container_name: bankapplication-configserver
+    ports:
+      - 8071:8071 # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    networks:
+      - bank
+    depends_on:
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/  
+      
+  eurekaserver:
+    build: ./eurekaserver
+    image: bankapplication-eurekaserver
+    container_name: bankapplication-eurekaserver
+    ports:
+      - "8070:8070"
+    networks:
+     - bank
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 15s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/  
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/       
+          
+  accounts:
+    #The docker file in bankapplication-accounts build the jar and provides the docker image with the following name.
+    build: ./accounts
+    image: bankapplication-accounts
+    container_name: bankapplication-accounts
+    ports:
+      - 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    networks:
+      - bank
+    depends_on:
+      - postgresDb
+      - configserver
+      - eurekaserver
+      - rabbitmq3
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s  
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresDb:5432/BankApplication
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/ 
+  
+  loans:
+    #The docker file in bankapplication-loans build the jar and provides the docker image with the following name.
+    build: ./loans
+    image: bankapplication-loans
+    container_name: bankapplication-loans
+    ports:
+      - 8090:8090 # Forward the exposed port 8090 on the container to port 8090 on the host machine 
+    networks:
+      - bank
+    depends_on:
+      - postgresDb
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s  
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresDb:5432/BankApplication
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/ 
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/  
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/       
+      
+  cards:
+    #The docker file in bankapplication-cards build the jar and provides the docker image with the following name.
+    build: ./cards
+    image: bankapplication-cards
+    container_name: bankapplication-cards
+    ports:
+      - 9000:9000 # Forward the exposed port 9000 on the container to port 9000 on the host machine  
+    networks:
+      - bank
+    depends_on:
+      - postgresDb
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s  
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresDb:5432/BankApplication
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/  
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/ 
+      
+  gatewayserver:
+    build: ./gatewayserver
+    image: gatewayserver
+    ports:
+      - "8072:8072"
+    networks:
+      - bank
+    depends_on:
+      - postgresDb
+      - configserver
+      - eurekaserver
+      - cards
+      - loans
+      - accounts
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/    
+      
+  notification:
+    #The docker file in bankapplication-notification build the jar and provides the docker image with the following name.
+    build: ./notification
+    image: bankapplication-notification
+    container_name: bankapplication-notification
+    ports:
+      - 8082:8082 # Forward the exposed port 8082 on the container to port 8082 on the host machine
+    networks:
+      - bank
+    depends_on:
+      - configserver
+      - eurekaserver
+      - rabbitmq3
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s  
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/ 
+#Volumes for DB data
+volumes:
+  dbApp-data:
+networks:
+  bank:
